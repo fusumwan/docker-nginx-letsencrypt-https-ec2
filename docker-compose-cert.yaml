@@ -3,7 +3,7 @@ services:
   letsencrypt:
     container_name: 'certbot-service'
     image: certbot/certbot
-    command: sh -c "certbot certonly --webroot -w /tmp/acme_challenge -d frontendapp.frontendapp4.com --text --agree-tos --email timothyfuapple@gmail.com --rsa-key-size 4096 --verbose --keep-until-expiring --preferred-challenges=http"
+    command: sh -c "certbot certonly --webroot -w /tmp/acme_challenge -d ec2-3-27-151-202.ap-southeast-2.compute.amazonaws.com --text --agree-tos --email timothyfuapple@gmail.com --rsa-key-size 4096 --verbose --keep-until-expiring --preferred-challenges=http"
     entrypoint: ""
     volumes:
       - "/etc/letsencrypt:/etc/letsencrypt"
