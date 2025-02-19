@@ -2,6 +2,19 @@ version: "3.3"
 
 services:
 
+  nginx:
+    container_name: nginx
+    restart: unless-stopped
+    image: nginx
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    networks:
+      - app-network  # Attach to the same network
   certbot:
     image: certbot/certbot
     container_name: certbot
