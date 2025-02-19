@@ -1,12 +1,6 @@
 version: "3.3"
 
 services:
-  frontendapp4-container:
-    container_name: frontendapp4-container
-    image: timothyfudocker/frontendapp4
-    networks:
-      - app-network  # Attach to the same network
-
   nginx:
     container_name: nginx
     restart: unless-stopped
@@ -28,6 +22,13 @@ services:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
     command: certonly --webroot -w /var/www/certbot --force-renewal --email timothyfuapple@gmail.com -d frontendapp4.duckdns.org --agree-tos
+    networks:
+      - app-network  # Attach to the same network
+
+
+  frontendapp4-container:
+    container_name: frontendapp4-container
+    image: timothyfudocker/frontendapp4
     networks:
       - app-network  # Attach to the same network
 
