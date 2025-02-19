@@ -1,6 +1,23 @@
 services:
-  helloworld:
+  frontendapp4-container:
     container_name: frontendapp4-container
     image: timothyfudocker/frontendapp4
+
+  nginx:
+    container_name: nginx
+    restart: unless-stopped
+    image: nginx
     ports:
-      - 80:3000
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email timothyfuapple@gmail.com -d  --agree-tos
