@@ -3,4 +3,4 @@ services:
     container_name: frontendapp4-container
     image: timothyfudocker/frontendapp4
     ports:
-      - 80:8081
+      - 80:3000
