@@ -1,9 +1,5 @@
 version: "3.3"
 services:
-  frontendapp4-container:
-    container_name: frontendapp4-container
-    image: timothyfudocker/frontendapp4
-
   nginx:
     container_name: nginx
     restart: unless-stopped
