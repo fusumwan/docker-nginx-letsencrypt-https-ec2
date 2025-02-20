@@ -27,7 +27,7 @@ services:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
     #command: certonly --webroot -w /var/www/certbot --force-renewal --email timothyfuapple@gmail.com -d frontendapp4.duckdns.org --agree-tos
-    command: sudo certbot certonly --webroot -w /var/www/certbot --config-dir /var/www/certbot/config --work-dir /var/www/certbot/work --logs-dir /var/www/certbot/logs --force-renewal --email timothyfuapple@gmail.com -d frontendapp4.duckdns.org --agree-tos
+    command: certonly --webroot -w /var/www/certbot --config-dir /var/www/certbot/config --work-dir /var/www/certbot/work --logs-dir /var/www/certbot/logs --force-renewal --email timothyfuapple@gmail.com -d frontendapp4.duckdns.org --agree-tos
     networks:
       - app-network  # Attach to the same network
 
@@ -39,7 +39,7 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx-https.conf
+      - ./nginx/nginx-https.conf:/etc/nginx/nginx.conf
       - ./certbot/conf:/var/www/certbot/config
       - ./certbot/www:/var/www/certbot
     networks:
