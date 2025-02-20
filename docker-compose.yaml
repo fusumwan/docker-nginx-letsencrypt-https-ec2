@@ -27,7 +27,7 @@ services:
     restart: unless-stopped
     build: ./nginx-https  # Build the nginx-https image from a Dockerfile
     depends_on:
-      - certbot  # Wait for certbot to be ready before starting nginx-https
+      - nginx  # Wait for certbot to be ready before starting nginx-https
     ports:
       - 80:80
       - 443:443
