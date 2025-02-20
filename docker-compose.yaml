@@ -22,27 +22,6 @@ services:
     networks:
       - app-network  # Attach to the same network
 
-
-  certbot:
-    image: certbot/certbot
-    container_name: certbot
-    depends_on:
-      - nginx  # Wait for nginx to be ready before starting Certbot
-    volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-    entrypoint: >
-      sh -c "
-      echo 'SSL Certificate Generated Successfully' &&
-      echo 'Stopping Nginx...' &&
-      sudo systemctl stop nginx &&
-      sudo pkill -f nginx && 
-      echo 'Checking if ports 80 and 443 are still in use...' &&
-      sudo netstat -tulnp | grep -E '80|443'
-      "
-    networks:
-      - app-network  # Attach to the same network
-
   nginx-https:
     container_name: nginx-https
     restart: unless-stopped
@@ -56,6 +35,13 @@ services:
       - ./nginx-https/nginx-https.conf:/etc/nginx/nginx.conf
       - ./certbot/conf:/var/www/certbot/config
       - ./certbot/www:/var/www/certbot
+    entrypoint: >
+      sh -c "
+      echo 'Checking for processes using ports 80 and 443...' &&
+      sudo lsof -i :80 -t | xargs -r sudo kill -9 &&
+      sudo lsof -i :443 -t | xargs -r sudo kill -9 &&
+      echo 'Starting Nginx with HTTPS config...' &&
+      nginx -g 'daemon off;'"
     networks:
       - app-network  # Attach to the same network
 
