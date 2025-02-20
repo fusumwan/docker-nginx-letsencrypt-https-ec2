@@ -50,14 +50,14 @@ services:
   nginx-https:
     container_name: nginx-https
     restart: unless-stopped
-    image: nginx-https
+    build: ./nginx-https  # Build the nginx-https image from a Dockerfile
     depends_on:
       - certbot  # Wait for certbot to be ready before starting nginx-https
     ports:
       - 80:80
       - 443:443
     volumes:
-      - ./nginx/nginx-https.conf:/etc/nginx/nginx.conf
+      - ./nginx-https/nginx-https.conf:/etc/nginx/nginx.conf
       - ./certbot/conf:/var/www/certbot/config
       - ./certbot/www:/var/www/certbot
     networks:
