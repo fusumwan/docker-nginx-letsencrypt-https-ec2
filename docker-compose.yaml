@@ -11,8 +11,7 @@ services:
     restart: unless-stopped
     image: nginx
     depends_on:
-      frontendapp4-container:  # Wait for frontendapp4-container to start first
-        condition: service_completed_successfully 
+      - frontendapp4-container  # Wait for frontendapp4-container to start first
     ports:
       - 80:80
       - 443:443
