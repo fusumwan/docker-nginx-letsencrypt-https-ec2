@@ -1,0 +1,27 @@
+services:
+
+  frontendapp4-container:
+    container_name: frontendapp4-container
+    image: timothyfudocker/frontendapp4
+    networks:
+      - app-network  # Attach to the same network
+
+  nginx:
+    container_name: nginx
+    restart: unless-stopped
+    image: nginx
+    depends_on:
+      - frontendapp4-container  # Wait for frontendapp4-container to start first
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx-https/nginx-https.conf:/etc/nginx/nginx.conf
+      - ./certbot/conf:/var/www/certbot/config
+      - ./certbot/www:/var/www/certbot
+    networks:
+      - app-network  # Attach to the same network
+
+networks:
+  app-network:
+    driver: bridge  # Define the network
