@@ -21,7 +21,9 @@ sudo dnf install docker-compose-plugin -y
 
 docker-compose up --build -d nginx
 
-docker-compose -f docker-compose-cert.yaml up --build
+docker-compose -f docker-compose.yaml up --build
+
+docker-compose -f docker-compose.yaml up
 
 http://ec2-3-27-151-202.ap-southeast-2.compute.amazonaws.com:8081
 
