@@ -47,6 +47,23 @@ services:
     networks:
       - app-network  # Attach to the same network
 
+  nginx-https:
+    container_name: nginx-https
+    restart: unless-stopped
+    image: nginx-https
+    depends_on:
+      - certbot  # Wait for certbot to be ready before starting nginx-https
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/nginx-https.conf:/etc/nginx/nginx.conf
+      - ./certbot/conf:/var/www/certbot/config
+      - ./certbot/www:/var/www/certbot
+    networks:
+      - app-network  # Attach to the same network
+
+
 networks:
   app-network:
     driver: bridge  # Define the network
