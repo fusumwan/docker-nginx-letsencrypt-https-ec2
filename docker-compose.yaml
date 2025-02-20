@@ -30,11 +30,22 @@ services:
     volumes:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
-    command: certonly --webroot -w /var/www/certbot --config-dir /var/www/certbot/config --work-dir /var/www/certbot/work --logs-dir /var/www/certbot/logs --force-renewal --email timothyfuapple@gmail.com -d frontendapp4.duckdns.org --agree-tos
+    entrypoint: >
+      sh -c "
+      certbot certonly --webroot -w /var/www/certbot 
+      --config-dir /var/www/certbot/config 
+      --work-dir /var/www/certbot/work 
+      --logs-dir /var/www/certbot/logs 
+      --force-renewal 
+      --email timothyfuapple@gmail.com 
+      -d frontendapp4.duckdns.org --agree-tos &&
+      echo 'SSL Certificate Generated Successfully' &&
+      echo 'Stopping Nginx...' &&
+      sudo systemctl stop nginx &&
+      sudo pkill -f nginx
+      "
     networks:
       - app-network  # Attach to the same network
-
-
 
 networks:
   app-network:
