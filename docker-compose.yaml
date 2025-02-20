@@ -26,8 +26,7 @@ services:
     image: certbot/certbot
     container_name: certbot
     depends_on:
-      nginx:  # Wait for nginx to be ready before starting Certbot
-        condition: service_completed_successfully 
+      - nginx  # Wait for nginx to be ready before starting Certbot
     volumes:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
@@ -43,9 +42,7 @@ services:
       echo 'SSL Certificate Generated Successfully' &&
       echo 'Stopping Nginx...' &&
       sudo systemctl stop nginx &&
-      sudo pkill -f nginx && 
-      echo 'Checking if ports 80 and 443 are still in use...' &&
-      sudo netstat -tulnp | grep -E '80|443'
+      sudo pkill -f nginx
       "
     networks:
       - app-network  # Attach to the same network
