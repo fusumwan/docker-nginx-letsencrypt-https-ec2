@@ -10,8 +10,6 @@ services:
     container_name: nginx
     restart: unless-stopped
     image: nginx
-    depends_on:
-      - frontendapp4-container  # Wait for frontendapp4-container to start first
     ports:
       - 80:80
       - 443:443
@@ -25,11 +23,10 @@ services:
   certbot:
     image: certbot/certbot
     container_name: certbot
-    depends_on:
-      - nginx  # Wait for nginx to be ready before starting Certbot
     volumes:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
+    #command: certonly --webroot -w /var/www/certbot --force-renewal --email timothyfuapple@gmail.com -d frontendapp4.duckdns.org --agree-tos
     command: certonly --webroot -w /var/www/certbot --config-dir /var/www/certbot/config --work-dir /var/www/certbot/work --logs-dir /var/www/certbot/logs --force-renewal --email timothyfuapple@gmail.com -d frontendapp4.duckdns.org --agree-tos
     networks:
       - app-network  # Attach to the same network
@@ -37,20 +34,16 @@ services:
   nginx-https:
     container_name: nginx-https
     restart: unless-stopped
-    build: ./nginx  # Ensure that a Dockerfile exists in ./nginx
-    depends_on:
-      certbot:
-        condition: service_completed_successfully  # Ensures Certbot completes before starting nginx-https
+    image: nginx-https
     ports:
       - 80:80
       - 443:443
     volumes:
       - ./nginx/nginx-https.conf:/etc/nginx/nginx.conf
-      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/conf:/var/www/certbot/config
       - ./certbot/www:/var/www/certbot
     networks:
       - app-network  # Attach to the same network
-    entrypoint: ["/bin/sh", "-c", "sleep 5 && sudo systemctl stop nginx && sudo pkill -f nginx && sudo nginx -c /etc/nginx/nginx.conf && sudo nginx -s reload"]
 
 
 networks:
