@@ -37,6 +37,7 @@ services:
   nginx-https:
     container_name: nginx-https
     restart: unless-stopped
+    image: nginx-https
     depends_on:
       certbot:
         condition: service_completed_successfully  # Ensures Certbot completes before starting nginx-https
