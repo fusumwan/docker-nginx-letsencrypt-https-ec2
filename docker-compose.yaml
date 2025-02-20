@@ -31,7 +31,22 @@ services:
     command: certonly --webroot -w /var/www/certbot --config-dir /var/www/certbot/config --work-dir /var/www/certbot/work --logs-dir /var/www/certbot/logs --force-renewal --email timothyfuapple@gmail.com -d frontendapp4.duckdns.org --agree-tos
     networks:
       - app-network  # Attach to the same network
-      
+
+  nginx-https:
+    container_name: nginx-https
+    restart: unless-stopped
+    image: nginx-https
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/nginx-https.conf:/etc/nginx/nginx.conf
+      - ./certbot/conf:/var/www/certbot/config
+      - ./certbot/www:/var/www/certbot
+    command: sudo systemctl stop nginx && sudo pkill -f nginx
+    networks:
+      - app-network  # Attach to the same network
+
 networks:
   app-network:
     driver: bridge  # Define the network
